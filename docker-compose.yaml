@@ -1,0 +1,63 @@
+version: '3.8'
+
+services:
+  krakend:
+    image: devopsfaith/krakend:2.2.0
+    container_name: krakend
+    volumes:
+      - ./krakend/krakend.json:/etc/krakend/krakend.json:ro
+    ports:
+      - "8080:8080"   # expose only KrakenD to host
+    depends_on:
+      - backend
+    networks:
+      - vouchers
+
+  frontend:
+    build: ./frontend
+    container_name: frontend
+    environment:
+      - REACT_APP_API_URL=http://localhost:8080
+    ports:
+      - "3000:80"
+    depends_on:
+      - voucher_seat
+    networks:
+      - vouchers
+
+  backend:
+    build: ./backend
+    container_name: backend
+    environment:
+      - LISTEN_PORT=:8888
+      - POSTGRES_ADDR=postgres
+      - POSTGRES_PORT=5432
+      - POSTGRES_DATABASE=vouchers
+      - POSTGRES_PASSWORD=12345
+    ports:
+      - "8888"        # optional for internal network, can be omitted
+    networks:
+      - vouchers
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:15
+    container_name: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 12345
+      POSTGRES_DB: vouchers
+    ports:
+      - "5437:5432"   # host port for direct access if needed
+    networks:
+      - vouchers
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+networks:
+  vouchers:
+    driver: bridge

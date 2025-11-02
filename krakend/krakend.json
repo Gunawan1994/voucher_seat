@@ -1,0 +1,26 @@
+{
+  "version": 3,
+  "name": "voucher-api",
+  "endpoints": [
+    {
+      "endpoint": "/api/check",
+      "method": "POST",
+      "backend": [
+        {
+          "url_pattern": "/api/check",
+          "host": ["http://backend:8888"]
+        }
+      ]
+    },
+    {
+      "endpoint": "/api/generate",
+      "method": "POST",
+      "backend": [
+        {
+          "url_pattern": "/api/generate",
+          "host": ["http://backend:8888"]
+        }
+      ]
+    }
+  ]
+}

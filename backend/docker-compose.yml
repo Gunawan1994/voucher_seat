@@ -1,0 +1,43 @@
+version: '3.8'
+
+volumes:
+  postgres_data:
+
+networks:
+  vouchers:
+    driver: bridge
+
+services:
+  postgres:
+    image: postgres:15
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 12345
+      POSTGRES_DB: vouchers
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5437:5432" # host:container
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  voucher_seat:
+    build: .
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+    environment:
+      - LISTEN_PORT=:8888
+      - POSTGRES_ADDR=postgres
+      - POSTGRES_PORT=5432
+      - POSTGRES_DATABASE=vouchers
+      - POSTGRES_PASSWORD=12345
+    ports:
+      - "127.0.0.1:8080:8080"
+    volumes:
+      - ./.local:/local
