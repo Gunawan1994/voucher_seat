@@ -23,7 +23,7 @@
 
 * Docker & Docker Compose
 * Go 1.25+ (for building services)
-* React
+* React (npm 10.8.2)
 
 ---
 
