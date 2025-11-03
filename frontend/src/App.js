@@ -37,7 +37,7 @@ function App() {
       const flightDateStr = form.flightDate.toISOString().split("T")[0];
 
       // Check if vouchers exist
-      const checkRes = await axios.post(`/api/check`, {
+      const checkRes = await axios.post(`${API_URL}/api/check`, {
         flightNumber: form.flightNumber,
         date: flightDateStr,
       });
@@ -51,7 +51,7 @@ function App() {
       }
 
       // Generate vouchers
-      const generateRes = await axios.post(`/api/generate`, {
+      const generateRes = await axios.post(`${API_URL}/api/generate`, {
         name: form.crewName,
         id: form.crewId,
         flightNumber: form.flightNumber,
