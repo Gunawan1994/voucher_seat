@@ -67,13 +67,13 @@ docker compose up -d
 * Build all services:
 
 ```bash
-docker compose build
+docker compose up --build
 ```
 
 * Stop and remove containers:
 
 ```bash
-docker compose down
+docker compose down -v
 ```
 
 * View logs:
