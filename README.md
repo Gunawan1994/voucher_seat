@@ -24,6 +24,7 @@
 * Docker & Docker Compose
 * Go 1.25+ (for building services)
 * React (npm 10.8.2)
+* GORM
 
 ---
 
