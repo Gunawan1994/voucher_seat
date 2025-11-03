@@ -15,7 +15,6 @@ function App() {
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // Use environment variable for backend API URL
   const API_URL = process.env.REACT_APP_API_URL || "http://localhost:8080";
 
   const handleChange = (e) => {
@@ -59,9 +58,12 @@ function App() {
         aircraft: form.aircraftType,
       });
 
-      if (generateRes.data.success && generateRes.data.data?.success) {
-        setSeats(generateRes.data.data.seats || []);
-        setMessage("Vouchers generated successfully!");
+      console.log("Generate response:", generateRes.data);
+
+      if (generateRes.data.success) {
+        const seats = generateRes.data.data?.seats || [];
+        setSeats(seats);
+        setMessage(`Vouchers generated successfully! ${seats.length} seats assigned.`);
       } else {
         setMessage(generateRes.data.message || "Failed to generate vouchers.");
       }
@@ -143,11 +145,34 @@ function App() {
 
 const styles = {
   container: { fontFamily: "Arial, sans-serif", textAlign: "center", marginTop: "50px" },
-  form: { display: "flex", flexDirection: "column", gap: "10px", alignItems: "center", maxWidth: "400px", margin: "0 auto" },
+  form: {
+    display: "flex",
+    flexDirection: "column",
+    gap: "10px",
+    alignItems: "center",
+    maxWidth: "400px",
+    margin: "0 auto",
+  },
   input: { padding: "10px", width: "100%", borderRadius: "5px", border: "1px solid #ccc" },
-  button: { backgroundColor: "#007bff", color: "white", border: "none", padding: "10px 20px", cursor: "pointer", fontSize: "16px", borderRadius: "5px" },
+  button: {
+    backgroundColor: "#007bff",
+    color: "white",
+    border: "none",
+    padding: "10px 20px",
+    cursor: "pointer",
+    fontSize: "16px",
+    borderRadius: "5px",
+  },
   message: { marginTop: "20px", fontWeight: "bold" },
-  card: { marginTop: "20px", backgroundColor: "#f8f9fa", padding: "20px", borderRadius: "10px", maxWidth: "300px", margin: "20px auto", boxShadow: "0px 2px 5px rgba(0,0,0,0.1)" },
+  card: {
+    marginTop: "20px",
+    backgroundColor: "#f8f9fa",
+    padding: "20px",
+    borderRadius: "10px",
+    maxWidth: "300px",
+    margin: "20px auto",
+    boxShadow: "0px 2px 5px rgba(0,0,0,0.1)",
+  },
 };
 
 export default App;
